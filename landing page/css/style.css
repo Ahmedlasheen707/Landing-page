@@ -140,7 +140,7 @@ a {
   object-position: center;
 }
 /* better-look section styles */
-#better-look {
+#more {
   padding: 5rem 0;
 }
 .images {
@@ -148,7 +148,7 @@ a {
   justify-content: space-around;
   align-items: center;
 }
-.bl-header {
+.more-header {
   margin-bottom: 3rem;
 }
 .bike-img {
