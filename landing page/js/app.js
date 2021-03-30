@@ -16,19 +16,26 @@
   });
 })();
 (() => {
-  // here i will scroll to
+  // here i will scroll to the section when clicking the navitem
   const sections = document.querySelectorAll("section");
   const links = document.querySelectorAll("li");
   links.forEach((link, i) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      scroll(0, sections[i].offsetTop - 50);
+      sections[i].scrollIntoView({ behavior: "smooth" });
     });
   });
 })();
 // this function scrolls to the top of the page
 const scrollUp = () => {
-  window.scroll(0, 0);
+  scrollTo({ top: 0, behavior: "smooth" });
+};
+// here i will scroll when clicking the SeeMore button
+const scrollToSeeMore = () => {
+  scroll({
+    top: document.querySelector("#more").offsetTop + 100,
+    behavior: "smooth",
+  });
 };
 // this function opens the navbar
 const expand = () => {
@@ -56,19 +63,24 @@ const changeNavColor = () => {
     navbar.classList.remove("gray");
   }
 };
-let scrolling = null;
-const hideNav = () => {
-  // when we stop scrolling tha last set time out will not be cleared and it will make the nav disappear but if we are at the top of the page it will not disappear
-  const navbar = document.querySelector(".navbar");
-  navbar.style.top = "0";
-  clearTimeout(scrolling);
-  scrolling = setTimeout(() => {
-    navbar.style.top = "-100%";
-  }, 3000);
-  if (window.scrollY < 50) {
+// this function will return a function that will hide the nav
+const hide = () => {
+  let scrolling = null;
+  return () => {
+    const navbar = document.querySelector(".navbar");
+    navbar.style.top = "0";
     clearTimeout(scrolling);
-  }
+    scrolling = setTimeout(() => {
+      navbar.style.top = "-100%";
+    }, 5000);
+    if (window.scrollY < 50) {
+      clearTimeout(scrolling);
+    }
+  };
+  // when we stop scrolling tha last set time out will not be cleared and it will make the nav disappear but if we are at the top of the page it will not disappear
 };
+const hideNav = hide();
+// here i will change the background color of the navitems when scrolling
 const activateNavLinks = () => {
   let links = document.querySelectorAll(".link");
   let sectionsOffset = [];
@@ -79,10 +91,9 @@ const activateNavLinks = () => {
     if (window.scrollY + 120 >= offset) {
       links.forEach((link, j) => {
         if (i === j) {
-          console.log(offset, window.scrollY);
-          link.style.backgroundColor = "#a3d2ca";
+          link.classList.add("active");
         } else {
-          link.style.backgroundColor = "transparent";
+          link.classList.remove("active");
         }
       });
     }
